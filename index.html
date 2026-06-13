@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operation: Forgiveness ❤️</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{
+    height:100vh;overflow:hidden;
+    background:linear-gradient(135deg,#ff4d6d,#ff8fab);
+    display:flex;justify-content:center;align-items:center;
+    color:white;text-align:center;
+}
+.container{max-width:700px;padding:20px}
+button{
+    padding:15px 30px;margin:10px;border:none;border-radius:15px;
+    cursor:pointer;font-size:20px
+}
+#yesBtn{background:white;color:#ff3366;font-weight:bold}
+#noBtn{background:#222;color:white}
+.progress-box{
+    width:80%;height:24px;margin:15px auto;
+    background:rgba(255,255,255,.2);border-radius:20px;overflow:hidden
+}
+.progress{height:100%;width:0%;background:white;transition:.4s}
+.heart{position:absolute;animation:float 6s linear forwards}
+@keyframes float{
+    from{transform:translateY(100vh);opacity:1}
+    to{transform:translateY(-100px);opacity:0}
+}
+</style>
+</head>
+<body>
+<div id="hearts"></div>
+<div class="container">
+    <div id="screen">
+        <h2>Loading...</h2>
+        <p>Scanning heart...</p>
+        <p>Analyzing emotions...</p>
+    </div>
+</div>
+
+<audio id="song" src="Audio1.mp3"></audio>
+
+<script>
+const screen=document.getElementById("screen");
+const song=document.getElementById("song");
+
+setTimeout(showFirstQuestion,2500);
+
+function makeHearts(count=30){
+    for(let i=0;i<count;i++){
+        const h=document.createElement("div");
+        h.className="heart";
+        h.innerHTML="❤️";
+        h.style.left=Math.random()*100+"vw";
+        h.style.fontSize=(20+Math.random()*25)+"px";
+        document.body.appendChild(h);
+        setTimeout(()=>h.remove(),6000);
+    }
+}
+
+function showFirstQuestion(){
+    screen.innerHTML=`
+        <h1>Hanene my little moon..Are you angry with me?</h1>
+        <button id="yesBtn">Yes</button>
+        <button id="noBtn">No</button>
+        <div id="msg"></div>
+    `;
+
+    document.getElementById("yesBtn").onclick=showForgiveStage;
+
+    document.getElementById("noBtn").onclick=()=>{
+        song.play();
+        makeHearts(50);
+        screen.innerHTML=`
+            <h1>Mission Complete ❤️</h1>
+            <p>Happiness detected.</p>
+        `;
+    };
+}
+
+function showForgiveStage(){
+    screen.innerHTML=`
+        <h1>I knew it! ❤️</h1>
+        <p>And now I love you.<br>Will you forgive me?</p>
+
+        <div id="level">Forgiveness Level: 0%</div>
+        <div class="progress-box">
+            <div id="progress" class="progress"></div>
+        </div>
+
+        <button id="yesBtn">Yes</button>
+        <button id="noBtn">No</button>
+        <div id="msg" style="margin-top:15px"></div>
+    `;
+
+    let level=0;
+    let scale=1;
+
+    const noBtn=document.getElementById("noBtn");
+    const yesBtn=document.getElementById("yesBtn");
+    const progress=document.getElementById("progress");
+    const levelText=document.getElementById("level");
+    const msg=document.getElementById("msg");
+
+    const jokes=[
+        "Build your own personality!",
+        "bhbhbhb 😏",
+        "come on haneneee.",
+        "come on my doctor ❤️",
+        "mine love miine miiine students mine."
+    ];
+
+    function escapeNo(){
+        level=Math.min(level+15,100);
+        progress.style.width=level+"%";
+        levelText.textContent="Forgiveness Level: "+level+"%";
+
+        msg.textContent=jokes[Math.floor(Math.random()*jokes.length)];
+
+        noBtn.style.position="absolute";
+        noBtn.style.left=Math.random()*(window.innerWidth-120)+"px";
+        noBtn.style.top=Math.random()*(window.innerHeight-80)+"px";
+
+        scale+=0.1;
+        yesBtn.style.transform=`scale(${scale})`;
+
+        if(level>=100) finalStage();
+    }
+
+    noBtn.addEventListener("mouseover",escapeNo);
+    noBtn.addEventListener("touchstart",escapeNo);
+
+    yesBtn.onclick=finalStage;
+}
+
+function finalStage(){
+    document.body.style.background="black";
+
+    screen.innerHTML=`
+        <h1>Siiiiii ❤️</h1>
+        <br>
+        <p>love u to the moon and back.</p>
+    `;
+
+    song.play();
+    makeHearts(80);
+}
+</script>
+</body>
+</html>
